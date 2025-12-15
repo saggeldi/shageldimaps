@@ -43,6 +43,7 @@ import app.organicmaps.util.Utils;
 import app.organicmaps.util.WindowInsetUtils.PaddingInsetsListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.tut.courier.ui.TutActivity;
 import java.util.List;
 import java.util.Objects;
 
@@ -339,7 +340,7 @@ public class DownloadResourcesLegacyActivity extends BaseMwmFragmentActivity
     // Re-use original intent to retain all flags and payload.
     // https://github.com/organicmaps/organicmaps/issues/6944
     final Intent intent = Objects.requireNonNull(getIntent());
-    intent.setComponent(new ComponentName(this, MwmActivity.class));
+    intent.setComponent(new ComponentName(this, TutActivity.class));
 
     // Disable animation because MwmActivity should appear exactly over this one
     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TOP);

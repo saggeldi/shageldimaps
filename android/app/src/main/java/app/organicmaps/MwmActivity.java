@@ -125,7 +125,18 @@ import app.organicmaps.util.bottomsheet.MenuBottomSheetItem;
 import app.organicmaps.widget.menu.MainMenu;
 import app.organicmaps.widget.placepage.PlacePageController;
 import app.organicmaps.widget.placepage.PlacePageViewModel;
+import kotlin.ParameterName;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.tut.courier.ui.TutAppFactory;
+import com.tut.courier.ui.TutMapListener;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -144,6 +155,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
   public static final String EXTRA_BOOKMARK_ID = "bookmark_id";
   public static final String EXTRA_TRACK_ID = "track_id";
   public static final String EXTRA_UPDATE_THEME = "update_theme";
+  public static final String EXTRA_MAP_LAT = "map_lat";
+  public static final String EXTRA_MAP_LNG = "map_lng";
+  public static final String EXTRA_MAP_ZOOM = "map_zoom";
+  public static final String EXTRA_MAP_TITLE = "map_title";
+  public static final String EXTRA_ORDER_ID = "order_id";
   private static final String EXTRA_CONSUMED = "mwm.extra.intent.processed";
   private boolean mPreciseLocationDialogShown = false;
 
@@ -316,6 +332,19 @@ public class MwmActivity extends BaseMwmFragmentActivity
     if (countryId != null)
     {
       Framework.nativeShowCountry(countryId, false);
+      return;
+    }
+
+    // Handle map positioning from TutActivity
+    if (intent.hasExtra(EXTRA_MAP_LAT) && intent.hasExtra(EXTRA_MAP_LNG))
+    {
+      final double lat = intent.getDoubleExtra(EXTRA_MAP_LAT, 0.0);
+      final double lng = intent.getDoubleExtra(EXTRA_MAP_LNG, 0.0);
+      final float zoom = intent.getFloatExtra(EXTRA_MAP_ZOOM, 13.0f);
+      Framework.nativeSetViewportCenter(lat, lng, (int) zoom);
+
+      // Trigger map ready callback
+      MapCallbackHolder.getInstance().onMapReady();
       return;
     }
 
@@ -560,6 +589,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
      */
     if (Map.isEngineCreated())
       onRenderingInitializationFinished();
+
+
+
   }
 
   private void refreshLightStatusBar()

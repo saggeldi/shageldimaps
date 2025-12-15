@@ -15,6 +15,12 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.preference.PreferenceManager;
+
+import com.tut.courier.ui.TutAppFactory;
+import com.tut.courier.ui.TutMapListener;
+
+import org.jetbrains.annotations.NotNull;
+
 import app.organicmaps.background.OsmUploadWork;
 import app.organicmaps.downloader.DownloaderNotifier;
 import app.organicmaps.location.LocationProviderFactoryImpl;
@@ -35,6 +41,12 @@ import app.organicmaps.sdk.util.ConnectionState;
 import app.organicmaps.sdk.util.log.Logger;
 import app.organicmaps.util.ThemeSwitcher;
 import app.organicmaps.util.Utils;
+import kotlin.ParameterName;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
@@ -129,6 +141,54 @@ public class MwmApplication extends Application implements Application.ActivityL
     Logger.i(TAG, "Initializing application");
 
     sInstance = this;
+
+    TutAppFactory.mapListener = new TutMapListener() {
+
+
+      @Override
+      public void startMap(double lat, double lng, float zoom, @NotNull String title, @NotNull Function0<@NotNull Unit> onMapRead, @NotNull Function0<@NotNull Unit> onMapClose, @NotNull String orderId, @NotNull Function1<? super @NotNull String, @NotNull Unit> onStartOrderClicked, @NotNull Function1<? super @NotNull String, @NotNull Unit> onCancelOrderClicked, @NotNull Function1<? super @NotNull String, @NotNull Unit> onCompleteOrderClicked, @NotNull Function0<@NotNull Unit> onShowRouteClicked, @NotNull Function2<? super @NotNull Double, ? super @NotNull Double, @NotNull Unit> onMapClick) {
+        // Store callbacks in MapCallbackHolder
+        MapCallbackHolder.getInstance().setCallbacks(
+            onMapRead,
+            onMapClose,
+            orderId,
+            onStartOrderClicked,
+            onCancelOrderClicked,
+            onCompleteOrderClicked,
+            onShowRouteClicked,
+            onMapClick
+        );
+
+        // Get current activity context
+        Activity activity = getTopActivity();
+        if (activity == null) {
+          Logger.e(TAG, "Cannot start map: no active activity");
+          return;
+        }
+
+        // Create intent to start MwmActivity
+        android.content.Intent intent = new android.content.Intent(activity, MwmActivity.class);
+        intent.putExtra(MwmActivity.EXTRA_MAP_LAT, lat);
+        intent.putExtra(MwmActivity.EXTRA_MAP_LNG, lng);
+        intent.putExtra(MwmActivity.EXTRA_MAP_ZOOM, zoom);
+        intent.putExtra(MwmActivity.EXTRA_MAP_TITLE, title);
+        intent.putExtra(MwmActivity.EXTRA_ORDER_ID, orderId);
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Start MwmActivity
+        activity.startActivity(intent);
+      }
+
+      @Override
+      public void startMapWithRoute(double starLat, double startLng, double endLat, double endLng) {
+
+      }
+
+      @Override
+      public void startMapForMapClick(double lat, double lng, @NotNull Function2<? super @NotNull Double, ? super @NotNull Double, @NotNull Unit> onMapClick) {
+
+      }
+    };
 
     PreferenceManager.setDefaultValues(this, R.xml.prefs_main, false);
     mOrganicMaps = new OrganicMaps(getApplicationContext(), BuildConfig.FLAVOR, BuildConfig.APPLICATION_ID,
