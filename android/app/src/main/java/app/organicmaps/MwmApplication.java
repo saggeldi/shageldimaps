@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.preference.PreferenceManager;
 
+import com.tut.courier.ui.KoinInitializer;
 import com.tut.courier.ui.TutAppFactory;
 import com.tut.courier.ui.TutMapListener;
 
@@ -41,7 +42,6 @@ import app.organicmaps.sdk.util.ConnectionState;
 import app.organicmaps.sdk.util.log.Logger;
 import app.organicmaps.util.ThemeSwitcher;
 import app.organicmaps.util.Utils;
-import kotlin.ParameterName;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
@@ -141,6 +141,9 @@ public class MwmApplication extends Application implements Application.ActivityL
     Logger.i(TAG, "Initializing application");
 
     sInstance = this;
+
+    // Initialize Koin dependency injection for tut_ui module
+    KoinInitializer.initialize(this);
 
     TutAppFactory.mapListener = new TutMapListener() {
 

@@ -40,6 +40,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 if (googleFirebaseServicesEnabled) {
   apply plugin: 'com.google.gms.google-services'
   apply plugin: 'com.google.firebase.crashlytics'
@@ -236,6 +237,10 @@ android {
   compileOptions {
     coreLibraryDesugaringEnabled = true
   }
+
+  kotlinOptions {
+    jvmTarget = '17'
+  }
 }
 
 dependencies {
@@ -296,6 +301,10 @@ dependencies {
 
   // tut
   implementation(project(":tut_ui"))
+
+  // Koin for Dependency Injection
+  implementation(libs.koin.android)
+  implementation(libs.koin.core)
 }
 
 def allowedPermissions = [
