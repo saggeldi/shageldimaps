@@ -780,6 +780,34 @@ public class MwmActivity extends BaseMwmFragmentActivity
       transaction.commit();
       mPreviousMapLayoutMode = layoutMode;
     }
+
+    // Move search and bookmarks buttons to top end
+    findViewById(R.id.map_buttons).post(() -> {
+      View searchButton = findViewById(R.id.btn_search);
+      View bookmarksButton = findViewById(R.id.btn_bookmarks);
+
+      if (searchButton != null && searchButton.getLayoutParams() instanceof androidx.constraintlayout.widget.ConstraintLayout.LayoutParams)
+      {
+        androidx.constraintlayout.widget.ConstraintLayout.LayoutParams searchParams =
+            (androidx.constraintlayout.widget.ConstraintLayout.LayoutParams) searchButton.getLayoutParams();
+        searchParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
+        searchParams.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
+        searchParams.startToEnd = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
+        searchParams.endToStart = R.id.btn_bookmarks;
+        searchButton.setLayoutParams(searchParams);
+      }
+
+      if (bookmarksButton != null && bookmarksButton.getLayoutParams() instanceof androidx.constraintlayout.widget.ConstraintLayout.LayoutParams)
+      {
+        androidx.constraintlayout.widget.ConstraintLayout.LayoutParams bookmarksParams =
+            (androidx.constraintlayout.widget.ConstraintLayout.LayoutParams) bookmarksButton.getLayoutParams();
+        bookmarksParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
+        bookmarksParams.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
+        bookmarksParams.startToEnd = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
+        bookmarksParams.endToEnd = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
+        bookmarksButton.setLayoutParams(bookmarksParams);
+      }
+    });
   }
 
   @Override

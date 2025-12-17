@@ -59,7 +59,7 @@ public class MapButtonsController extends Fragment
 
   @Nullable
   private MyPositionButton mNavMyPosition;
-  private SearchWheel mSearchWheel;
+//  private SearchWheel mSearchWheel;
   private BadgeDrawable mBadgeDrawable;
   private float mContentHeight;
   private float mContentWidth;
@@ -117,8 +117,8 @@ public class MapButtonsController extends Fragment
         .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomIn));
     mFrame.findViewById(R.id.nav_zoom_out)
         .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomOut));
-    final View bookmarksButton = mFrame.findViewById(R.id.btn_bookmarks);
-    bookmarksButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.bookmarks));
+    //final View bookmarksButton = mFrame.findViewById(R.id.btn_bookmarks);
+//    bookmarksButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.bookmarks));
     final View myPosition = mFrame.findViewById(R.id.my_position);
     mNavMyPosition =
         new MyPositionButton(myPosition, (v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.myPosition));
@@ -154,11 +154,11 @@ public class MapButtonsController extends Fragment
     if (helpButton != null)
       helpButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.help));
 
-    mSearchWheel = new SearchWheel(mFrame,
-                                   (v)
-                                       -> mMapButtonClickListener.onMapButtonClick(MapButtons.search),
-                                   (v) -> mMapButtonClickListener.onSearchCanceled(), mMapButtonsViewModel);
-    final View searchButton = mFrame.findViewById(R.id.btn_search);
+//    mSearchWheel = new SearchWheel(mFrame,
+//                                   (v)
+//                                       -> mMapButtonClickListener.onMapButtonClick(MapButtons.search),
+//                                   (v) -> mMapButtonClickListener.onSearchCanceled(), mMapButtonsViewModel);
+    //final View searchButton = mFrame.findViewById(R.id.btn_search);
 
     // Used to get the maximum height the buttons will evolve in
     mFrame.addOnLayoutChangeListener(new MapButtonsController.ContentViewLayoutChangeListener(mFrame));
@@ -166,8 +166,8 @@ public class MapButtonsController extends Fragment
     mButtonsMap = new HashMap<>();
     mButtonsMap.put(MapButtons.zoom, zoomFrame);
     mButtonsMap.put(MapButtons.myPosition, myPosition);
-    mButtonsMap.put(MapButtons.bookmarks, bookmarksButton);
-    mButtonsMap.put(MapButtons.search, searchButton);
+   // mButtonsMap.put(MapButtons.bookmarks, bookmarksButton);
+   // mButtonsMap.put(MapButtons.search, searchButton);
 
     if (mToggleMapLayerButton != null)
       mButtonsMap.put(MapButtons.toggleMapLayer, mToggleMapLayerButton);
@@ -198,7 +198,7 @@ public class MapButtonsController extends Fragment
       if (mNavMyPosition != null)
         mNavMyPosition.showButton(show);
       break;
-    case search: mSearchWheel.show(show);
+    case search: {};
     case bookmarks:
     case menu: UiUtils.showIf(show, buttonView); break;
     case trackRecordingStatus:
@@ -408,7 +408,7 @@ public class MapButtonsController extends Fragment
   public void onResume()
   {
     super.onResume();
-    mSearchWheel.onResume();
+//    mSearchWheel.onResume();
     updateMenuBadge();
     updateLayerButton();
     final WindowInsetUtils.PaddingInsetsListener insetsListener =
@@ -442,8 +442,8 @@ public class MapButtonsController extends Fragment
 
   public void onSearchOptionChange(@Nullable SearchWheel.SearchOption searchOption)
   {
-    if (searchOption == null)
-      mSearchWheel.reset();
+//    if (searchOption == null)
+//      mSearchWheel.reset();
   }
 
   public enum LayoutMode

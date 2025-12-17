@@ -162,7 +162,7 @@ public final class OrganicMaps implements DefaultLifecycleObserver
     // Copy map files from assets to storage if they don't exist
     // This allows bundling maps with the app to avoid downloading
     Logger.i(TAG, "Checking for bundled maps in assets...");
-    AssetMapsCopier.copyMapsFromAssets(mContext, writablePath);
+    AssetMapsCopier.copyMapsFromAssets(mContext, writablePath+"251123");
 
     // If platform directories are not created it means that native part of app will not be able
     // to work at all. So, we just ignore native part initialization in this case, e.g. when the
